@@ -50,8 +50,9 @@ webfile = 'ginlong.status'				# location of web file
  
 
 # inverter values found (so far) all big endian 16 bit unsigned:-
-header = '685951b0866f'				# hex stream header
+header = '685951b0' 					# hex stream header
 data_size = 206                     # hex stream size 
+inverter_temp = 31 					# offset 31 & 32 temperature (/10)
 inverter_vdc1 = 33 					# offset 33 & 34 DC volts chain 1 (/10)
 inverter_vdc2 = 35 					# offset 35 & 36 DC volts chain 2 (/10)
 inverter_adc1 = 39 					# offset 39 & 40 DC amps chain 1 (/10)
@@ -77,14 +78,14 @@ while True:		# loop forever
     rawdata = conn.recv(1000)				# read incoming data
     hexdata = binascii.hexlify(rawdata)		# convert data to hex
 
-    if(hexdata[0:12] == header and len(hexdata) == data_size):		# check for valid data
+    if(hexdata[0:8] == header and len(hexdata) == data_size):		# check for valid data
            
 																			# extract main values and convert to decimal
         watt_now = str(int(hexdata[inverter_now*2:inverter_now*2+4],16))    		# generating power in watts
         kwh_day = str(float(int(hexdata[inverter_day*2:inverter_day*2+4],16))/100)	# running total kwh for day
         kwh_total = str(int(hexdata[inverter_tot*2:inverter_tot*2+4],16)/10)		# running total kwh from installation
 
-																			# extract dc input values and convert to decimal
+	temp = str(float(int(hexdata[inverter_temp*2:inverter_temp*2+4],16))/10)		# temperature																		# extract dc input values and convert to decimal
         dc_volts1= str(float(int(hexdata[inverter_vdc1*2:inverter_vdc1*2+4],16))/10)	# input dc volts from chain 1
         dc_volts2= str(float(int(hexdata[inverter_vdc2*2:inverter_vdc2*2+4],16))/10)	# input dc volts from chain 2
         dc_amps1 = str(float(int(hexdata[inverter_adc1*2:inverter_adc1*2+4],16))/10)	# input dc amps from chain 1
