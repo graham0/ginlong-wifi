@@ -62,7 +62,8 @@ listen_port=9999				# port server listens for inverter stream
 
 
 # stream values found (so far) all big endian:-
-header="685951b0866f"				# stream header
+header="685951b0"					# stream header
+inverter_temp=31 					# offset 31 & 32 temperature (/10)
 inverter_vdc1=33 					# offset 33 & 34 DC volts chain 1 (/10)
 inverter_vdc2=35 					# offset 35 & 36 DC volts chain 2 (/10)
 inverter_adc1=39 					# offset 39 & 40 DC amps chain 1 (/10)
@@ -135,23 +136,26 @@ for (( ;; ))										# loop forever
 			ac_freq=$(echo "scale=2; $ac_freq/100" | bc)		# apply factor /100
 
 															# extract other historical values and convert to decimal
-			kwh_yesterday=${inverter_output:$inverter_yes*2:4}			# read values for kWh day
-			kwh_yesterday=$(echo $((16#$kwh_yesterday)))				# convert to integer
+			kwh_yesterday=${inverter_output:$inverter_yes*2:4}		# read values for kWh day
+			kwh_yesterday=$(echo $((16#$kwh_yesterday)))			# convert to integer
 			kwh_yesterday=$(echo "scale=1; $kwh_yesterday/100" | bc)	# apply factor /100
 			kwh_yesterday=$(echo $kwh_yesterday | sed 's/^\./0./')		# add leading zero
 
-			kwh_month=${inverter_output:$inverter_mth*2:4}		# read values total kwh for month
+			kwh_month=${inverter_output:$inverter_mth*2:4}			# read values total kwh for month
 			kwh_month=$(echo $((16#$kwh_month)))			 	# convert to integer				
 
 			kwh_lastmonth=${inverter_output:$inverter_lmth*2:4}		# read values total kwh for last month
 			kwh_lastmonth=$(echo $((16#$kwh_lastmonth)))		 	# convert to integer			
 
+			temp=${inverter_output:$inverter_temp*2:4}			# read values for inverter temp
+			temp=$(echo $((16#$temp)))			 		# convert to integer				
+			temp=$(echo "scale=1; $temp/10" | bc)				# apply factor /10
 
 			time_stamp=$(date +'%F %H:%M')						# get date and time
 
 			echo "$time_stamp $watts_now $kwh_day $kwh_tot" >> $logfile	# output to log (main values only)
 
-			echo "$time_stamp $watts_now $kwh_day $kwh_tot $dc_volts1 $dc_amps1 $dc_volts2 $dc_amps2 $ac_volts $ac_amps $ac_freq $kwh_yesterday $kwh_month $kwh_lastmonth"> $webfile	# output all values, possibly for webpage
+			echo "$time_stamp $watts_now $kwh_day $kwh_tot $dc_volts1 $dc_amps1 $dc_volts2 $dc_amps2 $ac_volts $ac_amps $ac_freq $kwh_yesterday $kwh_month $kwh_lastmonth $temp"> $webfile	# output all values, possibly for webpage
 		fi
 
 	sleep 5s									# wait five seconds
