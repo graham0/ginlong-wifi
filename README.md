@@ -3,7 +3,7 @@ Collect data from a second generation Ginlong/Solis inverter equipped with a WIF
 
 #Introduction
 A Ginlong/Solis second generation inverter equipped with a WIFI 'stick' sends it's data to the Ginlong
-Monitoring website (http://www.ginlongmonitoring.com/) once every five minutes, when the inverter is 
+Monitoring website (http://www.ginlongmonitoring.com/) once every six minutes, when the inverter is 
 live. It is also possible to log onto the WIFI 'stick' locally with a browser to configure the inverter
 and read the five minute updated generation stats. 
 
@@ -55,7 +55,7 @@ Each new entry occupies it's own line, new entries are appended to the end of th
 The 'webfile' contains 15 values again space delimited:-
 
 	Date Time Watts_now Day_kWh Total_kWh DC_volts_1 DC_amps_1 DC_volts_2 DC_amps_2 AC_volts
-	AC_amps AC_freq kwh_yesterday kwh_month kwh_last_month
+	AC_amps AC_freq kwh_yesterday kwh_month kwh_last_month inverter_temp
 
 Each new entry overwrites the existing one. The intention is to use this file to display currant 
 information on a webpage.
