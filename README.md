@@ -5,7 +5,7 @@ Collect data from a second generation Ginlong/Solis inverter equipped with a WIF
 A Ginlong/Solis second generation inverter equipped with a WIFI 'stick' sends it's data to the Ginlong
 Monitoring website (http://www.ginlongmonitoring.com/) once every six minutes, when the inverter is 
 live. It is also possible to log onto the WIFI 'stick' locally with a browser to configure the inverter
-and read the five minute updated generation stats. 
+and read the six minute updated generation stats. 
 
 Assuming you have already set up your system to do this. If not back-pedal a bit and get that working
 first. Refer to the instructions provided.
