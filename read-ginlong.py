@@ -2,7 +2,7 @@
 
 ###################################################################################################
 #
-#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.2 Sept 2015.
+#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.3 Oct 2015.
 #
 #  read-ginlong is free software: you can redistribute it and/or modify it under the terms of the
 #  GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -109,7 +109,7 @@ while True:		# loop forever
         log.close()
 
         web = open(webfile,'w')        # output all values, possibly for webpage
-        web.write(timestamp + ' ' + watt_now + ' ' + kwh_day + ' ' + kwh_total + ' ' + dc_volts1 + ' ' + dc_amps1 + ' ' + dc_volts2 + ' ' + dc_amps2 + ' ' + ac_volts + ' ' + ac_amps + ' ' + ac_freq + ' ' + kwh_yesterday + ' ' + kwh_month + ' ' + kwh_lastmonth + '\n')
+        web.write(timestamp + ' ' + watt_now + ' ' + kwh_day + ' ' + kwh_total + ' ' + dc_volts1 + ' ' + dc_amps1 + ' ' + dc_volts2 + ' ' + dc_amps2 + ' ' + ac_volts + ' ' + ac_amps + ' ' + ac_freq + ' ' + kwh_yesterday + ' ' + kwh_month + ' ' + kwh_lastmonth + ' ' + temp + '\n')
         web.close()
 
 conn.close()
