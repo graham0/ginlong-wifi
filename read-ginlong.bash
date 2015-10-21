@@ -2,7 +2,7 @@
 
 ###################################################################################################
 #
-#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.2 Sept 2015.
+#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.3 Oct 2015.
 #
 #  read-ginlong is free software: you can redistribute it and/or modify it under the terms of the
 #  GNU General Public License as published by the Free Software Foundation, either version 3 of the
