@@ -2,7 +2,7 @@
 
 ###################################################################################################
 #
-#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.3 Oct 2015.
+#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.4 Oct 2020.
 #
 #  read-ginlong is free software: you can redistribute it and/or modify it under the terms of the
 #  GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -63,7 +63,7 @@ inverter_freq = 57 					# offset 57 & 58 AC frequency (/100)
 inverter_now = 59 					# offset 59 & 60 currant generation Watts
 inverter_yes = 67 					# offset 67 & 68 yesterday kwh (/100)
 inverter_day = 69 					# offset 69 & 70 daily kWh (/100)
-inverter_tot = 73 					# offset 73 & 74 total kWh (/10)
+inverter_tot = 71 					# offset 71 & 72 & 73 & 74 total kWh (/10)
 inverter_mth = 87					# offset 87 & 88 total kWh for month 
 inverter_lmth = 91					# offset 91 & 92 total kWh for last month 
 
@@ -83,7 +83,7 @@ while True:		# loop forever
 																			# extract main values and convert to decimal
         watt_now = str(int(hexdata[inverter_now*2:inverter_now*2+4],16))    		# generating power in watts
         kwh_day = str(float(int(hexdata[inverter_day*2:inverter_day*2+4],16))/100)	# running total kwh for day
-        kwh_total = str(int(hexdata[inverter_tot*2:inverter_tot*2+4],16)/10)		# running total kwh from installation
+        kwh_total = str(int(hexdata[inverter_tot*2:inverter_tot*2+8],16)/10)		# running total kwh from installation
 
 	temp = str(float(int(hexdata[inverter_temp*2:inverter_temp*2+4],16))/10)		# temperature																		# extract dc input values and convert to decimal
         dc_volts1= str(float(int(hexdata[inverter_vdc1*2:inverter_vdc1*2+4],16))/10)	# input dc volts from chain 1
