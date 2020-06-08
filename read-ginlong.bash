@@ -2,7 +2,7 @@
 
 ###################################################################################################
 #
-#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.3 Oct 2015.
+#  Copyright 2015 Graham Whiteside, Manchester, UK. Version 0.4 June 2020.
 #
 #  read-ginlong is free software: you can redistribute it and/or modify it under the terms of the
 #  GNU General Public License as published by the Free Software Foundation, either version 3 of the
@@ -74,7 +74,7 @@ inverter_freq=57 					# offset 57 & 58 AC frequency (/100)
 inverter_now=59 					# offset 59 & 60 currant generation Watts
 inverter_yes=67 					# offset 67 & 68 yesterday kwh (/100)
 inverter_day=69 					# offset 69 & 70 daily kWh (/100)
-inverter_tot=73 					# offset 73 & 74 total kWh (/10)
+inverter_tot=71 					# offset 71 & 72 & 73 & 74 total kWh (/10)
 inverter_mth=87						# offset 87 & 88 total kWh for month 
 inverter_lmth=91					# offset 91 & 92 total kWh for last month 
 
@@ -98,7 +98,7 @@ for (( ;; ))										# loop forever
 			kwh_day=$(echo "scale=1; $kwh_day/100" | bc)		# apply factor /100
 			kwh_day=$(echo $kwh_day | sed 's/^\./0./')	 		# add leading zero
 
-			kwh_tot=${inverter_output:$inverter_tot*2:4}		# read values for kWh day
+			kwh_tot=${inverter_output:$inverter_tot*2:8}		# read values for kWh day
 			kwh_tot=$(echo $((16#$kwh_tot)))				 	# convert to integer				
 			kwh_tot=$(echo "$kwh_tot/10" | bc)					# apply factor /10
 
