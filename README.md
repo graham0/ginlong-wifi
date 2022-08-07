@@ -24,7 +24,7 @@ Log onto your inverter and click on 'Advanced'
 Now click 'Remote server'
 Enter a new ip address for 'Server B' (your computer) enter a port number (default 9999) select 'TCP' 
 Click the 'Test' button and a tick should appear.
-Click 'Save' and and when prompted 'Restart'
+Click 'Save' and when prompted 'Restart'
 
 ## Using the script(s)
 There are two scripts here, 'read-ginlong.bash' and 'read-ginlong.py' the bash script uses bash
