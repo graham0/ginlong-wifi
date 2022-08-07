@@ -38,78 +38,82 @@
 #  loaded into other software such as LibreOffice Calc.
 #
 ###################################################################################################
- 
+
 import socket, binascii, time
 
-
-# change these values to suit your requirements:- 
-HOST = ''	        	 				# Hostname or ip address of interface, leave blank for all
-PORT = 9999              				# listening on port 9999
-logfile = 'ginlong.log'					# location of output log file
-webfile = 'ginlong.status'				# location of web file
- 
+# change these values to suit your requirements:-
+HOST = ''  # Hostname or ip address of interface, leave blank for all
+PORT = 9999  # listening on port 9999
+logfile = 'ginlong.log'  # location of output log file
+webfile = 'ginlong.status'  # location of web file
 
 # inverter values found (so far) all big endian 16 bit unsigned:-
-header = '685951b0' 					# hex stream header
-data_size = 206                     # hex stream size 
-inverter_temp = 31 					# offset 31 & 32 temperature (/10)
-inverter_vdc1 = 33 					# offset 33 & 34 DC volts chain 1 (/10)
-inverter_vdc2 = 35 					# offset 35 & 36 DC volts chain 2 (/10)
-inverter_adc1 = 39 					# offset 39 & 40 DC amps chain 1 (/10)
-inverter_adc2 = 41 					# offset 41 & 42 DC amps chain 2 (/10)
-inverter_aac = 45					# offset 45 & 46 AC output amps (/10)
-inverter_vac = 51 					# offset 51 & 52 AC output volts (/10)
-inverter_freq = 57 					# offset 57 & 58 AC frequency (/100)
-inverter_now = 59 					# offset 59 & 60 currant generation Watts
-inverter_yes = 67 					# offset 67 & 68 yesterday kwh (/100)
-inverter_day = 69 					# offset 69 & 70 daily kWh (/100)
-inverter_tot = 71 					# offset 71 & 72 & 73 & 74 total kWh (/10)
-inverter_mth = 87					# offset 87 & 88 total kWh for month 
-inverter_lmth = 91					# offset 91 & 92 total kWh for last month 
+header = '685951b0'  # hex stream header
+data_size = 206  # hex stream size
+inverter_temp = 31  # offset 31 & 32 temperature (/10)
+inverter_vdc1 = 33  # offset 33 & 34 DC volts chain 1 (/10)
+inverter_vdc2 = 35  # offset 35 & 36 DC volts chain 2 (/10)
+inverter_adc1 = 39  # offset 39 & 40 DC amps chain 1 (/10)
+inverter_adc2 = 41  # offset 41 & 42 DC amps chain 2 (/10)
+inverter_aac = 45  # offset 45 & 46 AC output amps (/10)
+inverter_vac = 51  # offset 51 & 52 AC output volts (/10)
+inverter_freq = 57  # offset 57 & 58 AC frequency (/100)
+inverter_now = 59  # offset 59 & 60 currant generation Watts
+inverter_yes = 67  # offset 67 & 68 yesterday kwh (/100)
+inverter_day = 69  # offset 69 & 70 daily kWh (/100)
+inverter_tot = 71  # offset 71 & 72 & 73 & 74 total kWh (/10)
+inverter_mth = 87  # offset 87 & 88 total kWh for month
+inverter_lmth = 91  # offset 91 & 92 total kWh for last month
 
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   # create socket on required port
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # create socket on required port
 sock.bind((HOST, PORT))
 
+while True:  # loop forever
+    sock.listen(1)  # listen on port
+    conn, addr = sock.accept()  # wait for inverter connection
+    rawdata = conn.recv(1000)  # read incoming data
+    hexdata = binascii.hexlify(rawdata)  # convert data to hex
 
-while True:		# loop forever
-    sock.listen(1)							# listen on port
-    conn, addr = sock.accept()				# wait for inverter connection
-    rawdata = conn.recv(1000)				# read incoming data
-    hexdata = binascii.hexlify(rawdata)		# convert data to hex
+    if (hexdata[0:8] == header and len(hexdata) == data_size):  # check for valid data
 
-    if(hexdata[0:8] == header and len(hexdata) == data_size):		# check for valid data
-           
-																			# extract main values and convert to decimal
-        watt_now = str(int(hexdata[inverter_now*2:inverter_now*2+4],16))    		# generating power in watts
-        kwh_day = str(float(int(hexdata[inverter_day*2:inverter_day*2+4],16))/100)	# running total kwh for day
-        kwh_total = str(int(hexdata[inverter_tot*2:inverter_tot*2+8],16)/10)		# running total kwh from installation
+        # extract main values and convert to decimal
+        watt_now = str(int(hexdata[inverter_now * 2:inverter_now * 2 + 4], 16))  # generating power in watts
+        kwh_day = str(float(int(hexdata[inverter_day * 2:inverter_day * 2 + 4], 16)) / 100)  # running total kwh for day
+        kwh_total = str(
+            int(hexdata[inverter_tot * 2:inverter_tot * 2 + 8], 16) / 10)  # running total kwh from installation
 
-	temp = str(float(int(hexdata[inverter_temp*2:inverter_temp*2+4],16))/10)		# temperature																		# extract dc input values and convert to decimal
-        dc_volts1= str(float(int(hexdata[inverter_vdc1*2:inverter_vdc1*2+4],16))/10)	# input dc volts from chain 1
-        dc_volts2= str(float(int(hexdata[inverter_vdc2*2:inverter_vdc2*2+4],16))/10)	# input dc volts from chain 2
-        dc_amps1 = str(float(int(hexdata[inverter_adc1*2:inverter_adc1*2+4],16))/10)	# input dc amps from chain 1
-        dc_amps2 = str(float(int(hexdata[inverter_adc2*2:inverter_adc2*2+4],16))/10)	# input dc amps from chain 2
+        temp = str(float(int(hexdata[inverter_temp * 2:inverter_temp * 2 + 4],
+                             16)) / 10)  # temperature																		# extract dc input values and convert to decimal
+        dc_volts1 = str(
+            float(int(hexdata[inverter_vdc1 * 2:inverter_vdc1 * 2 + 4], 16)) / 10)  # input dc volts from chain 1
+        dc_volts2 = str(
+            float(int(hexdata[inverter_vdc2 * 2:inverter_vdc2 * 2 + 4], 16)) / 10)  # input dc volts from chain 2
+        dc_amps1 = str(
+            float(int(hexdata[inverter_adc1 * 2:inverter_adc1 * 2 + 4], 16)) / 10)  # input dc amps from chain 1
+        dc_amps2 = str(
+            float(int(hexdata[inverter_adc2 * 2:inverter_adc2 * 2 + 4], 16)) / 10)  # input dc amps from chain 2
 
-																			# extract other ac values and convert to decimal
-        ac_volts = str(float(int(hexdata[inverter_vac*2:inverter_vac*2+4],16))/10)		# output ac volts 
-        ac_amps = str(float(int(hexdata[inverter_aac*2:inverter_aac*2+4],16))/10)		# output ac amps 
-        ac_freq = str(float(int(hexdata[inverter_freq*2:inverter_freq*2+4],16))/100)	# output ac frequency hertz
+        # extract other ac values and convert to decimal
+        ac_volts = str(float(int(hexdata[inverter_vac * 2:inverter_vac * 2 + 4], 16)) / 10)  # output ac volts
+        ac_amps = str(float(int(hexdata[inverter_aac * 2:inverter_aac * 2 + 4], 16)) / 10)  # output ac amps
+        ac_freq = str(
+            float(int(hexdata[inverter_freq * 2:inverter_freq * 2 + 4], 16)) / 100)  # output ac frequency hertz
 
-																			# extract other historical values and convert to decimal
-        kwh_yesterday = str(float(int(hexdata[inverter_yes*2:inverter_yes*2+4],16))/100)	# yesterday's kwh
-        kwh_month = str(int(hexdata[inverter_mth*2:inverter_mth*2+4],16))					# running total kwh for month
-        kwh_lastmonth = str(int(hexdata[inverter_lmth*2:inverter_lmth*2+4],16))				# running total kwh for last month
+        # extract other historical values and convert to decimal
+        kwh_yesterday = str(float(int(hexdata[inverter_yes * 2:inverter_yes * 2 + 4], 16)) / 100)  # yesterday's kwh
+        kwh_month = str(int(hexdata[inverter_mth * 2:inverter_mth * 2 + 4], 16))  # running total kwh for month
+        kwh_lastmonth = str(
+            int(hexdata[inverter_lmth * 2:inverter_lmth * 2 + 4], 16))  # running total kwh for last month
 
+        timestamp = (time.strftime("%F %H:%M"))  # get date time
 
-        timestamp = (time.strftime("%F %H:%M"))		# get date time
-  
-        log = open(logfile,'a')        # write data to logfile, main values only
+        log = open(logfile, 'a')  # write data to logfile, main values only
         log.write(timestamp + ' ' + watt_now + ' ' + kwh_day + ' ' + kwh_total + '\n')
         log.close()
 
-        web = open(webfile,'w')        # output all values, possibly for webpage
-        web.write(timestamp + ' ' + watt_now + ' ' + kwh_day + ' ' + kwh_total + ' ' + dc_volts1 + ' ' + dc_amps1 + ' ' + dc_volts2 + ' ' + dc_amps2 + ' ' + ac_volts + ' ' + ac_amps + ' ' + ac_freq + ' ' + kwh_yesterday + ' ' + kwh_month + ' ' + kwh_lastmonth + ' ' + temp + '\n')
+        web = open(webfile, 'w')  # output all values, possibly for webpage
+        web.write(
+            timestamp + ' ' + watt_now + ' ' + kwh_day + ' ' + kwh_total + ' ' + dc_volts1 + ' ' + dc_amps1 + ' ' + dc_volts2 + ' ' + dc_amps2 + ' ' + ac_volts + ' ' + ac_amps + ' ' + ac_freq + ' ' + kwh_yesterday + ' ' + kwh_month + ' ' + kwh_lastmonth + ' ' + temp + '\n')
         web.close()
 
 conn.close()
