@@ -1,7 +1,7 @@
 # ginlong-wifi
 Collect data from a second generation Ginlong/Solis inverter equipped with a WIFI stick. 
 
-#Introduction
+## Introduction
 A Ginlong/Solis second generation inverter equipped with a WIFI 'stick' sends it's data to the Ginlong
 Monitoring website (http://www.ginlongmonitoring.com/) once every six minutes, when the inverter is 
 live. It is also possible to log onto the WIFI 'stick' locally with a browser to configure the inverter
@@ -19,14 +19,14 @@ power yourself? The local web page relies very heavily on Java script making it 
 reading the inverter's stats. Another option is to get the inverter to send the data it sends to 
 Ginlong monitoring to a local computer on your own network.
 
-#Configuring the inverter
+## Configuring the inverter
 Log onto your inverter and click on 'Advanced'
 Now click 'Remote server'
 Enter a new ip address for 'Server B' (your computer) enter a port number (default 9999) select 'TCP' 
 Click the 'Test' button and a tick should appear.
-Click 'Save' and and when prompted 'Restart'
+Click 'Save' and when prompted 'Restart'
 
-#Using the script(s)
+## Using the script(s)
 There are two scripts here, 'read-ginlong.bash' and 'read-ginlong.py' the bash script uses bash
 commands and needs to be ran on a Linux machine. The other is written in Python and should run on
 any Python enabled system, although this one is also for Linux based systems. You only need one of 
@@ -43,7 +43,7 @@ Once you have modified the file locations inside the file set it running. Wait f
 the first entry should appear when the inverter sends it's data. You may have to disable/modify any
 running firewall on your system.
 
-#The output files
+## The output files
 Both programs produce the same output.
 
 The 'logfile' contains 5 values separated by spaces, as follows:-
@@ -60,7 +60,7 @@ The 'webfile' contains 15 values again space delimited:-
 Each new entry overwrites the existing one. The intention is to use this file to display currant 
 information on a webpage.
 
-#Disclaimer
+## Disclaimer
 This works fine on my Solis 3.6 2G inverter equipped with a WIFI 'stick'. According to Ginlong, the 
 WIFI stick is compatible with all it's current solar and wind generation 2G inverters. It would be
 logical therefore to assume that these scripts would be compatible with all the current second
